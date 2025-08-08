@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Oky B | Starpeace</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --background-dark: #07091a;
+            --background-light: #0b0c2a;
+            --text-primary: #e0e7ff;
+            --text-secondary: #cbe2ff;
+            --highlight-star: #fffaa5;
+            --button-main: #5577ff;
+            --button-hover: #7b99ff;
+            --button-veg: #4caf50;
+            --button-veg-hover: #66bb6a;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background: radial-gradient(ellipse at bottom, var(--background-light) 0%, var(--background-dark) 100%);
+            color: var(--text-primary);
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+        }
+        
+        main {
+            z-index: 1;
+            padding: 2rem;
+            max-width: 800px;
+            width: 90%;
+            overflow-y: auto;
+            max-height: 100vh;
+            box-sizing: border-box;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        main::-webkit-scrollbar {
+            display: none;
+        }
+
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        h1 {
+            font-size: 3.5em;
+            color: var(--highlight-star);
+            text-shadow: 0 0 10px rgba(255, 250, 165, 0.6), 0 0 20px rgba(255, 250, 165, 0.4);
+            margin-bottom: 0.25em;
+            font-weight: 600;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        h2 {
+            font-size: 2em;
+            color: var(--text-secondary);
+            margin-top: 2em;
+            border-bottom: 2px solid var(--text-secondary);
+            padding-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        p, a {
+            color: var(--text-secondary);
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin: 0.5em auto;
+        }
+
+        a {
+            color: var(--highlight-star);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: var(--text-primary);
+        }
+
+        .cta-links a {
+            margin: 0 1em;
+            font-size: 1.2em;
+        }
+
+        #moon {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            width: 100px;
+            z-index: -1;
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+            animation: float 10s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .buttons-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        button, .button-style {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        button:hover, .button-style:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 10px rgba(0,0,0,0.2);
+        }
+
+        .veg {
+            background-color: var(--button-veg);
+            color: white;
+        }
+
+        .veg:hover {
+            background-color: var(--button-veg-hover);
+        }
+
+        #guestbook {
+            background: rgba(11, 12, 42, 0.8);
+            backdrop-filter: blur(5px);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            text-align: left;
+            margin-top: 2em;
+        }
+
+        #guestbook h2 {
+            margin-top: 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--text-secondary);
+        }
+
+        #guestbook button {
+            background-color: var(--button-main);
+            color: white;
+            width: 100%;
+        }
+
+        #guestbook button:hover {
+            background-color: var(--button-hover);
+        }
+
+        #cat-message {
+            margin-top: 15px;
+            font-size: 1.2em;
+            color: var(--highlight-star);
+            font-style: italic;
+            min-height: 25px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 1.5em 0 0 0;
+        }
+
+        input, textarea {
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            font-family: 'Poppins', sans-serif;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--highlight-star);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        @media (max-width: 600px) {
+            html, body {
+                overflow-y: auto;
+            }
+            #guestbook {
+                width: 90%;
+                margin-left: auto;
+                margin-right: auto;
+                position: relative;
+                left: auto;
+                bottom: auto;
+                transform: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="stars"></canvas>
+    <img id="moon" src="https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg" alt="Moon" />
+
+    <main>
+        <h1>🌌 Welcome to Starpeace 🌌</h1>
+        <p>Hey, I'm **Oky B**. I like to sing and write songs from the soul — songs you can feel, not just hear. You can listen to them on Spotify. I also write books to spark love for engineering and STEM. My latest book features inspiring quotes from scientific pioneers like Nikola Tesla, Alfred Nobel, and Lise Meitner — hoping to help more people see scientists as heroes worth looking up to.</p>
+
+        <p class="cta-links">
+            <a href="https://open.spotify.com/artist/4PjrNKRySnpixMFBWkxJ5d" target="_blank">🎵 Listen on Spotify</a>
+            <a href="https://www.amazon.com/Adventures-Star-Wanted-Change-World-ebook/dp/B0BTB6HB58" target="_blank">📖 Read my book</a>
+        </p>
+
+        <audio controls style="margin-top: 1.5em;">
+            <source src="my-song.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+
+        <section id="game">
+            <h2>🐱 Feed the Cat</h2>
+            <div class="buttons-container">
+                <button class="veg" onclick="feedCat('carrot')">Give Carrot 🥕</button>
+                <button class="veg" onclick="feedCat('broccoli')">Give Broccoli 🥦</button>
+                <button class="veg" onclick="feedCat('pepper')">Give Pepper 🌶️</button>
+            </div>
+            <div id="cat-message"></div>
+        </section>
+        
+        <section id="guestbook">
+            <h2>📚 Guestbook</h2>
+            <form action="https://formsubmit.co/okyderana@gmail.com" method="POST">
+                <input type="text" name="name" placeholder="Your Name" required>
+                <input type="email" name="email" placeholder="Your Email" required>
+                <textarea name="message" rows="3" placeholder="Message"></textarea>
+                <button type="submit">Send to Oky</button>
+            </form>
+        </section>
+    </main>
+
+    <script>
+        // Animated encircling stars with falling comet
+        const canvas = document.getElementById('stars');
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+        let lastCometTime = 0;
+        const cometInterval = 10000; // 10 seconds
+        let comets = [];
+
+        function initStars() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            stars = Array.from({ length: 500 }).map(() => ({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 2 + 0.5,
+                angle: Math.random() * Math.PI * 2,
+                speed: (Math.random() * 0.001) + 0.0005,
+                radius: Math.random() * (canvas.width / 2)
+            }));
+        }
+
+        function drawStars() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+
+            for (let s of stars) {
+                s.x = centerX + s.radius * Math.cos(s.angle);
+                s.y = centerY + s.radius * Math.sin(s.angle);
+                s.angle += s.speed;
+
+                ctx.beginPath();
+                ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+                ctx.fillStyle = '#ffffff';
+                ctx.fill();
+            }
+        }
+
+        function createComet() {
+            const startX = Math.random() * canvas.width;
+            const startY = 0;
+            const endX = Math.random() * canvas.width;
+            const endY = canvas.height;
+            const speed = 2;
+            const length = 80;
+
+            comets.push({
+                x: startX,
+                y: startY,
+                endX: endX,
+                endY: endY,
+                speed: speed,
+                length: length,
+                trail: []
+            });
+        }
+
+        function drawComets() {
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
+            for (let i = comets.length - 1; i >= 0; i--) {
+                const comet = comets.at(i);
+                comet.x += (comet.endX - comet.x) / Math.sqrt(Math.pow(comet.endX - comet.x, 2) + Math.pow(comet.endY - comet.y, 2)) * comet.speed;
+                comet.y += (comet.endY - comet.y) / Math.sqrt(Math.pow(comet.endX - comet.x, 2) + Math.pow(comet.endY - comet.y, 2)) * comet.speed;
+
+                comet.trail.push({ x: comet.x, y: comet.y });
+                if (comet.trail.length > comet.length) {
+                    comet.trail.shift();
+                }
+
+                ctx.beginPath();
+                for (let j = 0; j < comet.trail.length - 1; j++) {
+                    ctx.lineTo(comet.trail.at(j).x, comet.trail.at(j).y);
+                }
+                ctx.stroke();
+
+                const distanceToEnd = Math.sqrt(Math.pow(comet.endX - comet.x, 2) + Math.pow(comet.endY - comet.y, 2));
+                if (distanceToEnd < comet.speed) {
+                    comets.splice(i, 1);
+                }
+            }
+        }
+
+        function animate() {
+            drawStars();
+            drawComets();
+            requestAnimationFrame(animate);
+
+            const currentTime = Date.now();
+            if (currentTime - lastCometTime > cometInterval) {
+                createComet();
+                lastCometTime = currentTime;
+            }
+        }
+
+        initStars();
+        animate();
+        window.addEventListener('resize', initStars);
+
+        // Cat game
+        function feedCat(veg) {
+            const messages = {
+                carrot: '😺 Yum! Carrots are crunchy!',
+                broccoli: '😸 Broccoli makes me strong!',
+                pepper: '😹 Spicy! But I like it!'
+            };
+            document.getElementById('cat-message').textContent = messages[veg];
+        }
+    </script>
+</body>
+</html>
